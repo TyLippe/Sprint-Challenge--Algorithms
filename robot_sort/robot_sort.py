@@ -96,42 +96,43 @@ class SortingRobot:
         """
         Sort the robot's list.
         """
-        #Robot needs to move to the right and left (number line) to grab an item (number) and place it in the right room
-        #Does light need to be on? UPDATE: I think the light has something to do with it
-        #as long as robot can move to the right, we will sort from left to right. 
-        while not self.light_is_on():
-            self.set_light_on()
-
+        #Robot needs to move to the right and left (number line) to grab an item (number) 
+        #and place it in the right room
+        
+        #Does light need to be on? UPDATE: I think the light has something to do with it, also going to use it as break
+        self.set_light_on()
+        #Pickup our first item
+        self.swap_item()
+        
+        #while light is on we will run function
+        while self.light_is_on() is True:
+            #as long as robot can move to the right, we will move from left to right. 
             while self.can_move_right():
-                #check current item vs new one
-                #if no item, we need to pick item up
-                if self.compare_item() == None:
-                    self.swap_item()
-                    self.move_right()
-                #elif we compare and if item is greater than swap
-                elif self.compare_item() == 1:
-                    self.swap_item()
-                #else move right 
-                self.move_left()
-                self.swap_item()
+                #move to the right with our current item
                 self.move_right()
+                #check current item vs new one
+                #if we compare and item is greater than  we swap
+                if self.compare_item() == 1:
+                    self.swap_item()
+            #if item is none then swap and finish
+            if self.compare_item() == None:
+                self.swap_item()
+                self.set_light_off()
+                break
 
-            while not self.can_move_right():
-                #when we hit all the way to the righ we will reverse and go left exchanging all lower items
+            #when robot can no longer move to the right we will move left
+            else:
                 while self.can_move_left():
-                    self.swap_item()
+                    #go left
                     self.move_left()
-                    if self.compare_item() == -1:
+                    #if item is less than current item we will move it more to the left
+                    if self.compare_item() == None:
                         self.swap_item()
-                    self.move_right()
-                    self.swap_item()
-                    self.move_left()
-                            # elif self.compare_item() == -1:
-                            #     self.swap_item()
-                            #     self.move_left()
-                            # else:
-                            #     self.move_left()
-                return self._list
+                        self.move_right()
+                        self.swap_item()
+                        break
+                        
+
 
 
 
